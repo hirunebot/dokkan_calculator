@@ -1,5 +1,4 @@
 from django import forms
-from .models import Stats
 
 class CalculationForm(forms.Form):
     stats_atk = forms.IntegerField(label='ATK： ')
@@ -47,8 +46,3 @@ class CalculationForm(forms.Form):
     )
     SAboost_level = forms.IntegerField(initial=6)
     ki_bonus = forms.FloatField(initial = 2.0)
-
-class StatsForm(forms.ModelForm):
-    class Meta:
-        model = Stats
-        fields = ["slug", "stats_atk", "stats_def", "Lskill_atk", "Lskill_def", "Pskill_atk_1", "Pskill_def_1", "Pskill_atk_2", "Pskill_def_2", "SA_atk", "SA_def", "ULSA_atl", "ULSA_def", "link_atk", "link_def", "SA_power"]

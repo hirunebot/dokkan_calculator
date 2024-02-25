@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect
-from .models import Stats
 from app.forms import CalculationForm
 
 # Create your views here.
