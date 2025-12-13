@@ -1,4 +1,4 @@
-import { forwardRef } from "react";
+import { forwardRef, useId } from "react";
 
 interface Option {
 	value: number;
@@ -12,16 +12,23 @@ interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
 }
 
 const Select = forwardRef<HTMLSelectElement, SelectProps>(
-	({ label, error, options, className = "", ...props }, ref) => {
+	({ label, error, options, className = "", id: providedId, ...props }, ref) => {
+		const generatedId = useId();
+		const selectId = providedId || generatedId;
+
 		return (
 			<div className="w-full">
 				{label && (
-					<label className="block text-sm font-medium text-gray-700 mb-1">
+					<label
+						htmlFor={selectId}
+						className="block text-sm font-medium text-gray-700 mb-1"
+					>
 						{label}
 					</label>
 				)}
 				<select
 					ref={ref}
+					id={selectId}
 					className={`
             w-full h-10 px-3 py-2 border border-gray-300 rounded-md
             text-gray-900 font-medium
