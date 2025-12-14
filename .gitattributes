@@ -1,0 +1,12 @@
+* text=auto eol=lf
+
+# 明示的にバイナリファイルを指定
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary
