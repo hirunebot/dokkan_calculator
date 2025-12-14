@@ -4,10 +4,8 @@ interface ResultDisplayProps {
 	result: FullCalculationResult | null;
 	isCalculating?: boolean;
 	statsMultipliers?: {
-		passiveAtkMultiplierPercentage: number;
-		passiveDefMultiplierPercentage: number;
-		supportAtkMultiplierPercentage: number;
-		supportDefMultiplierPercentage: number;
+		atkMultiplierPercentage: number;
+		defMultiplierPercentage: number;
 	};
 }
 
@@ -79,48 +77,26 @@ export default function ResultDisplay({
 				)}
 			</div>
 
-			{(!!statsMultipliers?.passiveAtkMultiplierPercentage ||
-				!!statsMultipliers?.passiveDefMultiplierPercentage ||
-				!!statsMultipliers?.supportAtkMultiplierPercentage ||
-				!!statsMultipliers?.supportDefMultiplierPercentage) && (
+			{(!!statsMultipliers?.atkMultiplierPercentage ||
+				!!statsMultipliers?.defMultiplierPercentage) && (
 				<div className="mt-4 space-y-2">
-					{!!statsMultipliers.passiveAtkMultiplierPercentage && (
+					{!!statsMultipliers.atkMultiplierPercentage && (
 						<div className="flex justify-between items-center">
 							<span className="text-sm font-medium text-gray-600">
-								パッシブATK倍率
+								ATK倍率 (パッシブ・サポート)
 							</span>
 							<span className="text-base font-semibold text-gray-700">
-								{statsMultipliers.passiveAtkMultiplierPercentage}%
+								{statsMultipliers.atkMultiplierPercentage}%
 							</span>
 						</div>
 					)}
-					{!!statsMultipliers.passiveDefMultiplierPercentage && (
+					{!!statsMultipliers.defMultiplierPercentage && (
 						<div className="flex justify-between items-center">
 							<span className="text-sm font-medium text-gray-600">
-								パッシブDEF倍率
+								DEF倍率 (パッシブ・サポート)
 							</span>
 							<span className="text-base font-semibold text-gray-700">
-								{statsMultipliers.passiveDefMultiplierPercentage}%
-							</span>
-						</div>
-					)}
-					{!!statsMultipliers.supportAtkMultiplierPercentage && (
-						<div className="flex justify-between items-center">
-							<span className="text-sm font-medium text-gray-600">
-								サポートATK倍率
-							</span>
-							<span className="text-base font-semibold text-gray-700">
-								{statsMultipliers.supportAtkMultiplierPercentage}%
-							</span>
-						</div>
-					)}
-					{!!statsMultipliers.supportDefMultiplierPercentage && (
-						<div className="flex justify-between items-center">
-							<span className="text-sm font-medium text-gray-600">
-								サポートDEF倍率
-							</span>
-							<span className="text-base font-semibold text-gray-700">
-								{statsMultipliers.supportDefMultiplierPercentage}%
+								{statsMultipliers.defMultiplierPercentage}%
 							</span>
 						</div>
 					)}
