@@ -22,10 +22,6 @@ export default function ActiveSkillCard({ stats }: ActiveSkillCardProps) {
 		);
 	}, [stats, activeSkillPower, temporaryATKBoost]);
 
-	const formatNumber = (num: number) => {
-		return num.toLocaleString("ja-JP");
-	};
-
 	return (
 		<div className="bg-white p-6 rounded-lg shadow-md">
 			<h3 className="text-lg font-semibold mb-4 text-gray-900">
@@ -40,12 +36,6 @@ export default function ActiveSkillCard({ stats }: ActiveSkillCardProps) {
 						onChange={(e) => setActiveSkillPower(Number(e.target.value))}
 						options={ACTIVE_SKILL_POWER_OPTIONS}
 					/>
-					<div className="p-3 bg-blue-50 border border-blue-200 rounded-md">
-						<p className="text-xs text-blue-700">
-							<strong>必殺威力アップレベル:</strong> 必殺技設定と共有 (レベル
-							{stats.SAboost_level})
-						</p>
-					</div>
 				</div>
 				<div className="space-y-4">
 					<Input
@@ -64,12 +54,9 @@ export default function ActiveSkillCard({ stats }: ActiveSkillCardProps) {
 						アクティブスキルATK
 					</span>
 					<span className="text-2xl font-bold text-gray-900">
-						{formatNumber(activeSkillATK)}
+						{activeSkillATK.toLocaleString("ja-JP")}
 					</span>
 				</div>
-				<p className="text-xs text-gray-600 mt-1">
-					威力{activeSkillPower + temporaryATKBoost / 100}倍として計算
-				</p>
 			</div>
 		</div>
 	);

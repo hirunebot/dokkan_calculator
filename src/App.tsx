@@ -1,5 +1,4 @@
 import { useCallback, useMemo, useState } from "react";
-import CalculationBreakdown from "@/components/CalculationBreakdown";
 import DamageCalculationForm from "@/components/forms/DamageCalculationForm";
 import LeaderSkillForm from "@/components/forms/LeaderSkillForm";
 import LinkSkillForm from "@/components/forms/LinkSkillForm";
@@ -11,7 +10,7 @@ import ResultDisplay from "@/components/ResultDisplay";
 import { calculateFullStats, validateDokkanStats } from "@/lib/calculations";
 import type { DokkanStats, FullCalculationResult } from "@/lib/types";
 import { DEFAULT_DOKKAN_STATS } from "@/lib/types";
-import { debounce } from "@/lib/utils";
+import { calculateStatMultipliers, debounce } from "@/lib/utils";
 
 export default function App() {
 	const [stats, setStats] = useState<DokkanStats>(DEFAULT_DOKKAN_STATS);
@@ -20,7 +19,6 @@ export default function App() {
 	const [damageReduction, setDamageReduction] = useState(0);
 	const [_, setCalculationTrigger] = useState(0);
 
-	// Debounced calculation trigger
 	const triggerCalculation = useCallback(
 		debounce(() => setCalculationTrigger((prev) => prev + 1), 300),
 		[],
@@ -65,9 +63,13 @@ export default function App() {
 		return calculateFullStats(stats, damageInput);
 	}, [stats, damageCalcEnabled, enemyAtk, damageReduction, validationErrors]);
 
+	const { statsMultipliers } = useMemo(
+		() => calculateStatMultipliers(stats),
+		[stats],
+	);
+
 	return (
 		<div className="min-h-screen bg-gray-50">
-			{/* Header */}
 			<header className="bg-white shadow-sm">
 				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
 					<div className="flex items-center justify-between">
@@ -90,7 +92,6 @@ export default function App() {
 
 			<main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 				<div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-					{/* Input Forms */}
 					<div className="lg:col-span-2 space-y-6">
 						<StatsForm stats={stats} onChange={handleStatChange} />
 
@@ -113,17 +114,18 @@ export default function App() {
 						/>
 					</div>
 
-					{/* Results */}
 					<div className="lg:col-span-1">
 						<div className="sticky top-8 space-y-6">
-							<ResultDisplay result={calculationResult} isCalculating={false} />
-							<CalculationBreakdown stats={stats} result={calculationResult} />
+							<ResultDisplay
+								result={calculationResult}
+								isCalculating={false}
+								statsMultipliers={statsMultipliers}
+							/>
 						</div>
 					</div>
 				</div>
 			</main>
 
-			{/* Footer */}
 			<footer className="bg-white border-t border-gray-200 mt-16">
 				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
 					<p className="text-center text-sm text-gray-500">
