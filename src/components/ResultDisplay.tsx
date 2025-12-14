@@ -7,12 +7,14 @@ interface ResultDisplayProps {
 		atkMultiplierPercentage: number;
 		defMultiplierPercentage: number;
 	};
+	activeSkillATK?: number | null;
 }
 
 export default function ResultDisplay({
 	result,
 	isCalculating = false,
 	statsMultipliers,
+	activeSkillATK,
 }: ResultDisplayProps) {
 	if (isCalculating) {
 		return (
@@ -41,11 +43,16 @@ export default function ResultDisplay({
 		<div className="bg-white p-6 rounded-lg shadow-md">
 			<h3 className="text-lg font-semibold mb-4 text-gray-900">計算結果</h3>
 
-			{(result.atkOverflow || result.defOverflow) && (
+			{(result.atkOverflow ||
+				result.defOverflow ||
+				(activeSkillATK === 0 && activeSkillATK != null)) && (
 				<div className="mb-4 p-4 bg-red-50 border-2 border-red-300 rounded-lg">
 					<ul className="text-sm text-red-600 list-disc list-inside">
 						{result.atkOverflow && <li>ATK値がオーバーフローしました</li>}
 						{result.defOverflow && <li>DEF値がオーバーフローしました</li>}
+						{activeSkillATK === 0 && activeSkillATK != null && (
+							<li>アクティブスキルATK値がオーバーフローしました</li>
+						)}
 					</ul>
 				</div>
 			)}
@@ -57,6 +64,17 @@ export default function ResultDisplay({
 						{result.atk.toLocaleString()}
 					</p>
 				</div>
+
+				{activeSkillATK != null && activeSkillATK > 0 && (
+					<div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+						<h4 className="text-sm font-medium text-red-800 mb-1">
+							アクティブスキルATK
+						</h4>
+						<p className="text-3xl font-bold text-red-900 break-all">
+							{activeSkillATK.toLocaleString()}
+						</p>
+					</div>
+				)}
 
 				<div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
 					<h4 className="text-sm font-medium text-blue-800 mb-1">DEF</h4>

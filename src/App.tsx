@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
+import ActiveSkillCard from "@/components/ActiveSkillCard";
 import DamageCalculationForm from "@/components/forms/DamageCalculationForm";
 import LeaderSkillForm from "@/components/forms/LeaderSkillForm";
 import LinkSkillForm from "@/components/forms/LinkSkillForm";
@@ -7,7 +8,11 @@ import StatsForm from "@/components/forms/StatsForm";
 import SuperAttackForm from "@/components/forms/SuperAttackForm";
 import SupportForm from "@/components/forms/SupportForm";
 import ResultDisplay from "@/components/ResultDisplay";
-import { calculateFullStats, validateDokkanStats } from "@/lib/calculations";
+import {
+	calculateActiveSkillATK,
+	calculateFullStats,
+	validateDokkanStats,
+} from "@/lib/calculations";
 import type { DokkanStats, FullCalculationResult } from "@/lib/types";
 import { DEFAULT_DOKKAN_STATS } from "@/lib/types";
 import { calculateStatMultipliers, debounce } from "@/lib/utils";
@@ -17,6 +22,8 @@ export default function App() {
 	const [damageCalcEnabled, setDamageCalcEnabled] = useState(false);
 	const [enemyAtk, setEnemyAtk] = useState(50000);
 	const [damageReduction, setDamageReduction] = useState(0);
+	const [activeSkillPower, setActiveSkillPower] = useState(5.5);
+	const [temporaryATKBoost, setTemporaryATKBoost] = useState(0);
 	const [_, setCalculationTrigger] = useState(0);
 
 	const triggerCalculation = useCallback(
@@ -47,6 +54,18 @@ export default function App() {
 		[triggerCalculation],
 	);
 
+	const handleActiveSkillChange = useCallback(
+		(field: "activeSkillPower" | "temporaryATKBoost", value: number) => {
+			if (field === "activeSkillPower") {
+				setActiveSkillPower(value);
+			} else {
+				setTemporaryATKBoost(value);
+			}
+			triggerCalculation();
+		},
+		[triggerCalculation],
+	);
+
 	const validationErrors = useMemo(() => validateDokkanStats(stats), [stats]);
 
 	const calculationResult = useMemo((): FullCalculationResult | null => {
@@ -62,6 +81,17 @@ export default function App() {
 
 		return calculateFullStats(stats, damageInput);
 	}, [stats, damageCalcEnabled, enemyAtk, damageReduction, validationErrors]);
+
+	const activeSkillATK = useMemo((): number | null => {
+		if (validationErrors.length > 0) return null;
+
+		return calculateActiveSkillATK(
+			stats,
+			activeSkillPower,
+			temporaryATKBoost,
+			stats.SAboost_level,
+		);
+	}, [stats, activeSkillPower, temporaryATKBoost, validationErrors]);
 
 	const { statsMultipliers } = useMemo(
 		() => calculateStatMultipliers(stats),
@@ -103,6 +133,12 @@ export default function App() {
 
 						<SuperAttackForm stats={stats} onChange={handleStatChange} />
 
+						<ActiveSkillCard
+							activeSkillPower={activeSkillPower}
+							temporaryATKBoost={temporaryATKBoost}
+							onChange={handleActiveSkillChange}
+						/>
+
 						<LinkSkillForm stats={stats} onChange={handleStatChange} />
 
 						<DamageCalculationForm
@@ -120,6 +156,7 @@ export default function App() {
 								result={calculationResult}
 								isCalculating={false}
 								statsMultipliers={statsMultipliers}
+								activeSkillATK={activeSkillATK}
 							/>
 						</div>
 					</div>
