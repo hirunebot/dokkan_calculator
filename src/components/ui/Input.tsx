@@ -4,12 +4,32 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 	label?: string;
 	error?: string;
 	suffix?: string;
+	disableSelectOnFocus?: boolean;
 }
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
-	({ label, error, suffix, className = "", id: providedId, ...props }, ref) => {
+	(
+		{
+			label,
+			error,
+			suffix,
+			className = "",
+			id: providedId,
+			disableSelectOnFocus = false,
+			onFocus,
+			...props
+		},
+		ref,
+	) => {
 		const generatedId = useId();
 		const inputId = providedId || generatedId;
+
+		const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+			if (!disableSelectOnFocus && e.target.type === "number") {
+				e.target.select();
+			}
+			onFocus?.(e);
+		};
 
 		return (
 			<div className="w-full">
@@ -25,6 +45,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
 					<input
 						ref={ref}
 						id={inputId}
+						onFocus={handleFocus}
 						className={`
               w-full h-10 px-3 py-2 border border-gray-300 rounded-md
               text-gray-900 font-medium
