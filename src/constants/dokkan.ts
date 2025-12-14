@@ -7,7 +7,6 @@ export const SA_POWER_OPTIONS = [
 	{ value: 4.5, label: "極大 レベル25(極限)" },
 	{ value: 6.3, label: "超絶特大 レベル15(極限)" },
 	{ value: 5.3, label: "超特大 レベル15(極限)" },
-	{ value: 5.5, label: "究極（アクティブ判定）" },
 ] as const;
 
 export const SABOOST_LEVEL_OPTIONS = [
@@ -25,12 +24,10 @@ export const SABOOST_LEVEL_OPTIONS = [
 ] as const;
 
 export const KI_BONUS_OPTIONS = [
-	{ value: 1.0, label: "1.0 (気力0)" },
-	{ value: 1.2, label: "1.2 (気力1-2)" },
-	{ value: 1.4, label: "1.4 (気力3-5)" },
-	{ value: 1.6, label: "1.6 (気力6-8)" },
-	{ value: 1.8, label: "1.8 (気力9-11)" },
-	{ value: 2.0, label: "2.0 (気力12以上)" },
+	{ value: 2.0, label: "2.0 (気力24)" },
+	{ value: 1.75, label: "1.75 (気力18)" },
+	{ value: 1.5, label: "1.5 (気力12)" },
+	{ value: 1.6, label: "1.6 (一部のキャラ)" },
 ] as const;
 
 export const ACTIVE_SKILL_POWER_OPTIONS = [
