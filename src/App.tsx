@@ -83,7 +83,9 @@ export default function App() {
 		return calculateFullStats(stats, damageInput);
 	}, [stats, damageCalcEnabled, enemyAtk, damageReduction, validationErrors]);
 
-	const activeSkillATK = useMemo((): number | null => {
+	const activeSkillATK = useMemo(():
+		| { value: number; overflow: boolean }
+		| null => {
 		if (validationErrors.length > 0) return null;
 
 		return calculateActiveSkillATK(
@@ -130,7 +132,7 @@ export default function App() {
 						<SupportForm stats={stats} onChange={handleStatChange} />
 						<SuperAttackForm
 							stats={stats}
-							onChange={handleStatChange}
+							handleStatChange={handleStatChange}
 							useActiveSkill={useActiveSkill}
 							setUseActiveSkill={setUseActiveSkill}
 						/>

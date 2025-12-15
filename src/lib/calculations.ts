@@ -9,7 +9,10 @@ const MAX_UINT32 = 2 ** 32; // 4,294,967,296
 const MAX_BASE_VALUE = 2 ** 32; // 基礎値の上限: 4,294,967,296
 const MAX_PERCENTAGE_VALUE = 2 ** 32 * 100; // パーセンテージ値の上限: 429,496,729,600
 
-export function calculateATK(stats: DokkanStats): number {
+export function calculateATK(stats: DokkanStats): {
+	value: number;
+	overflow: boolean;
+} {
 	const {
 		stats_atk,
 		Lskill_atk_1,
@@ -31,32 +34,30 @@ export function calculateATK(stats: DokkanStats): number {
 
 	let atk = stats_atk;
 	atk *= 1 + (Lskill_atk_1 + Lskill_atk_2) / 100;
-
 	atk *= 1 + Pskill_atk_1 / 100 + support_atk_1 / 100;
 	atk *= 1 + Pskill_atk_2 / 100 + support_atk_2 / 100;
-
 	atk *= 1 + support_atk_active / 100;
 	atk *= 1 + support_atk_item / 100;
 	atk *= 1 + support_atk_field / 100;
 	atk *= 1 + support_atk_memory / 100;
-
 	atk *= 1 + link_atk / 100;
-
 	atk *= SA_power + SA_atk / 100 + SAboost_level * 0.05;
-
 	atk *= ki_bonus;
 
 	const result = Math.round(atk);
-	// オーバーフロー時は0を返す
-	return result >= MAX_UINT32 ? 0 : result;
+	const overflow = result >= MAX_UINT32;
+	return {
+		value: overflow ? 0 : result,
+		overflow,
+	};
 }
 
 export function calculateActiveSkillATK(
 	stats: DokkanStats,
 	activeSkillPower: number,
 	temporaryATKBoost: number,
-	boostLevel: number,
-): number {
+	SABoostLevel: number,
+): { value: number; overflow: boolean } {
 	const {
 		stats_atk,
 		Lskill_atk_1,
@@ -75,31 +76,32 @@ export function calculateActiveSkillATK(
 	} = stats;
 
 	let atk = stats_atk;
-
 	atk *= 1 + (Lskill_atk_1 + Lskill_atk_2) / 100;
-
 	atk *= 1 + Pskill_atk_1 / 100 + support_atk_1 / 100;
 	atk *= 1 + Pskill_atk_2 / 100 + support_atk_2 / 100;
-
 	atk *= 1 + support_atk_active / 100;
 	atk *= 1 + support_atk_item / 100;
 	atk *= 1 + support_atk_field / 100;
 	atk *= 1 + support_atk_memory / 100;
-
 	atk *= 1 + link_atk / 100;
 
-	const totalPower = activeSkillPower + temporaryATKBoost / 100;
-	atk *= totalPower + boostLevel * 0.05;
+	const activeSkillMultiplier = activeSkillPower + temporaryATKBoost / 100;
+	atk *= activeSkillMultiplier + SABoostLevel * 0.05;
 	atk *= 1 + SA_atk / 100;
-
 	atk *= ki_bonus;
 
 	const result = Math.round(atk);
-	// オーバーフロー時は0を返す
-	return result >= MAX_UINT32 ? 0 : result;
+	const overflow = result >= MAX_UINT32;
+	return {
+		value: overflow ? 0 : result,
+		overflow,
+	};
 }
 
-export function calculateDEF(stats: DokkanStats): number {
+export function calculateDEF(stats: DokkanStats): {
+	value: number;
+	overflow: boolean;
+} {
 	const {
 		stats_def,
 		Lskill_def_1,
@@ -117,24 +119,22 @@ export function calculateDEF(stats: DokkanStats): number {
 	} = stats;
 
 	let def = stats_def;
-
 	def *= 1 + (Lskill_def_1 + Lskill_def_2) / 100;
-
 	def *= 1 + Pskill_def_1 / 100 + support_def_1 / 100;
 	def *= 1 + Pskill_def_2 / 100 + support_def_2 / 100;
-
 	def *= 1 + support_def_active / 100;
 	def *= 1 + support_def_item / 100;
 	def *= 1 + support_def_field / 100;
 	def *= 1 + support_def_memory / 100;
-
 	def *= 1 + SA_def / 100;
-
 	def *= 1 + link_def / 100;
 
 	const result = Math.round(def);
-	// オーバーフロー時は0を返す
-	return result >= MAX_UINT32 ? 0 : result;
+	const overflow = result >= MAX_UINT32;
+	return {
+		value: overflow ? 0 : result,
+		overflow,
+	};
 }
 
 export function calculateDamageTaken(
@@ -154,20 +154,20 @@ export function calculateFullStats(
 	stats: DokkanStats,
 	damageInput?: DamageCalculationInput,
 ): FullCalculationResult {
-	const atk = calculateATK(stats);
-	const def = calculateDEF(stats);
+	const atkResult = calculateATK(stats);
+	const defResult = calculateDEF(stats);
 
 	const result: FullCalculationResult = {
-		atk,
-		def,
-		atkOverflow: atk === 0,
-		defOverflow: def === 0,
+		atk: atkResult.value,
+		def: defResult.value,
+		atkOverflow: atkResult.overflow,
+		defOverflow: defResult.overflow,
 	};
 
 	if (damageInput) {
 		const damageCalcInput: DamageCalculationInput = {
 			...damageInput,
-			player_def: def,
+			player_def: defResult.value,
 		};
 		result.damage_calculation = calculateDamageTaken(damageCalcInput);
 	}
@@ -248,7 +248,7 @@ export function validateDokkanStats(stats: Partial<DokkanStats>): string[] {
 		stats.SAboost_level !== undefined &&
 		(stats.SAboost_level < 0 || stats.SAboost_level > 50)
 	) {
-		errors.push("必殺威力アップレベルは0以上50以下にしてください");
+		errors.push("必殺威力アップレベルは50以下にしてください");
 	}
 
 	return errors;
