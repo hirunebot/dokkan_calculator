@@ -17,6 +17,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
 			id: providedId,
 			disableSelectOnFocus = false,
 			onFocus,
+			onInput,
 			...props
 		},
 		ref,
@@ -29,6 +30,14 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
 				e.target.select();
 			}
 			onFocus?.(e);
+		};
+
+		const handleInput = (e: React.FormEvent<HTMLInputElement>) => {
+			const target = e.target as HTMLInputElement;
+			if (target.type === "number") {
+				target.value = target.value.replace(/[^0-9]/g, "");
+			}
+			onInput?.(e);
 		};
 
 		return (
@@ -46,6 +55,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
 						ref={ref}
 						id={inputId}
 						onFocus={handleFocus}
+						onInput={handleInput}
 						className={`
               w-full h-10 px-3 py-2 border border-gray-300 rounded-md
               text-gray-900 font-medium

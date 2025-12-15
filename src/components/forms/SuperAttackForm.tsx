@@ -1,18 +1,18 @@
 import Input from "@/components/ui/Input";
 import Select from "@/components/ui/Select";
-import { SA_POWER_OPTIONS, SABOOST_LEVEL_OPTIONS } from "@/constants/dokkan";
+import { SA_POWER_OPTIONS } from "@/constants/dokkan";
 import type { DokkanStats } from "@/lib/types";
 
 interface SuperAttackFormProps {
 	stats: DokkanStats;
-	onChange: (field: keyof DokkanStats, value: number) => void;
+	handleStatChange: (field: keyof DokkanStats, value: number) => void;
 	useActiveSkill: boolean;
 	setUseActiveSkill: (use: boolean) => void;
 }
 
 export default function SuperAttackForm({
 	stats,
-	onChange,
+	handleStatChange,
 	useActiveSkill,
 	setUseActiveSkill,
 }: SuperAttackFormProps) {
@@ -20,8 +20,6 @@ export default function SuperAttackForm({
 		<div className="space-y-6">
 			<div className="bg-white p-6 rounded-lg shadow-md">
 				<h3 className="text-lg font-semibold mb-4 text-gray-900">必殺技</h3>
-
-				{/* アクティブスキル使用チェックボックス */}
 				<div className="mb-4">
 					<label className="flex items-center cursor-pointer">
 						<input
@@ -41,16 +39,18 @@ export default function SuperAttackForm({
 						<Select
 							label="必殺威力"
 							value={stats.SA_power}
-							onChange={(e) => onChange("SA_power", Number(e.target.value))}
+							onChange={(e) =>
+								handleStatChange("SA_power", Number(e.target.value))
+							}
 							options={SA_POWER_OPTIONS}
 						/>
-						<Select
+						<Input
 							label="必殺威力アップレベル"
+							type="number"
 							value={stats.SAboost_level}
 							onChange={(e) =>
-								onChange("SAboost_level", Number(e.target.value))
+								handleStatChange("SAboost_level", Number(e.target.value))
 							}
-							options={SABOOST_LEVEL_OPTIONS}
 						/>
 					</div>
 					<div className="space-y-4">
@@ -58,14 +58,18 @@ export default function SuperAttackForm({
 							label="必殺追加効果ATK上昇率"
 							type="number"
 							value={stats.SA_atk}
-							onChange={(e) => onChange("SA_atk", Number(e.target.value))}
+							onChange={(e) =>
+								handleStatChange("SA_atk", Number(e.target.value))
+							}
 							suffix="%"
 						/>
 						<Input
 							label="必殺追加効果DEF上昇率"
 							type="number"
 							value={stats.SA_def}
-							onChange={(e) => onChange("SA_def", Number(e.target.value))}
+							onChange={(e) =>
+								handleStatChange("SA_def", Number(e.target.value))
+							}
 							suffix="%"
 						/>
 					</div>

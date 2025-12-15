@@ -7,7 +7,7 @@ interface ResultDisplayProps {
 		atkMultiplierPercentage: number;
 		defMultiplierPercentage: number;
 	};
-	activeSkillATK?: number | null;
+	activeSkillATK?: { value: number; overflow: boolean } | null;
 }
 
 export default function ResultDisplay({
@@ -45,12 +45,12 @@ export default function ResultDisplay({
 
 			{(result.atkOverflow ||
 				result.defOverflow ||
-				(activeSkillATK === 0 && activeSkillATK != null)) && (
+				(activeSkillATK?.overflow ?? false)) && (
 				<div className="mb-4 p-4 bg-red-50 border-2 border-red-300 rounded-lg">
 					<ul className="text-sm text-red-600 list-disc list-inside">
 						{result.atkOverflow && <li>ATK値がオーバーフローしました</li>}
 						{result.defOverflow && <li>DEF値がオーバーフローしました</li>}
-						{activeSkillATK === 0 && activeSkillATK != null && (
+						{activeSkillATK?.overflow && (
 							<li>アクティブスキルATK値がオーバーフローしました</li>
 						)}
 					</ul>
@@ -65,13 +65,13 @@ export default function ResultDisplay({
 					</p>
 				</div>
 
-				{activeSkillATK != null && activeSkillATK > 0 && (
+				{activeSkillATK != null && activeSkillATK.value > 0 && (
 					<div className="p-4 bg-red-50 border border-red-200 rounded-lg">
 						<h4 className="text-sm font-medium text-red-800 mb-1">
 							アクティブスキルATK
 						</h4>
 						<p className="text-3xl font-bold text-red-900 break-all">
-							{activeSkillATK.toLocaleString()}
+							{activeSkillATK.value.toLocaleString()}
 						</p>
 					</div>
 				)}
