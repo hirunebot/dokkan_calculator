@@ -1,5 +1,3 @@
-import { useState } from "react";
-import ActiveSkillCard from "@/components/ActiveSkillCard";
 import Input from "@/components/ui/Input";
 import Select from "@/components/ui/Select";
 import { SA_POWER_OPTIONS, SABOOST_LEVEL_OPTIONS } from "@/constants/dokkan";
@@ -8,14 +6,16 @@ import type { DokkanStats } from "@/lib/types";
 interface SuperAttackFormProps {
 	stats: DokkanStats;
 	onChange: (field: keyof DokkanStats, value: number) => void;
+	useActiveSkill: boolean;
+	setUseActiveSkill: (use: boolean) => void;
 }
 
 export default function SuperAttackForm({
 	stats,
 	onChange,
+	useActiveSkill,
+	setUseActiveSkill,
 }: SuperAttackFormProps) {
-	const [useActiveSkill, setUseActiveSkill] = useState(false);
-
 	return (
 		<div className="space-y-6">
 			<div className="bg-white p-6 rounded-lg shadow-md">
@@ -71,9 +71,6 @@ export default function SuperAttackForm({
 					</div>
 				</div>
 			</div>
-
-			{/* アクティブスキルカード */}
-			{useActiveSkill && <ActiveSkillCard stats={stats} />}
 		</div>
 	);
 }

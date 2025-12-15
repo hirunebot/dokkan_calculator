@@ -22,6 +22,7 @@ export default function App() {
 	const [damageCalcEnabled, setDamageCalcEnabled] = useState(false);
 	const [enemyAtk, setEnemyAtk] = useState(50000);
 	const [damageReduction, setDamageReduction] = useState(0);
+	const [useActiveSkill, setUseActiveSkill] = useState(false);
 	const [activeSkillPower, setActiveSkillPower] = useState(5.5);
 	const [temporaryATKBoost, setTemporaryATKBoost] = useState(0);
 	const [_, setCalculationTrigger] = useState(0);
@@ -124,23 +125,23 @@ export default function App() {
 				<div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 					<div className="lg:col-span-2 space-y-6">
 						<StatsForm stats={stats} onChange={handleStatChange} />
-
 						<LeaderSkillForm stats={stats} onChange={handleStatChange} />
-
 						<PassiveSkillForm stats={stats} onChange={handleStatChange} />
-
 						<SupportForm stats={stats} onChange={handleStatChange} />
-
-						<SuperAttackForm stats={stats} onChange={handleStatChange} />
-
-						<ActiveSkillCard
-							activeSkillPower={activeSkillPower}
-							temporaryATKBoost={temporaryATKBoost}
-							onChange={handleActiveSkillChange}
+						<SuperAttackForm
+							stats={stats}
+							onChange={handleStatChange}
+							useActiveSkill={useActiveSkill}
+							setUseActiveSkill={setUseActiveSkill}
 						/>
-
+						{useActiveSkill && (
+							<ActiveSkillCard
+								activeSkillPower={activeSkillPower}
+								temporaryATKBoost={temporaryATKBoost}
+								onChange={handleActiveSkillChange}
+							/>
+						)}
 						<LinkSkillForm stats={stats} onChange={handleStatChange} />
-
 						<DamageCalculationForm
 							enemyAtk={enemyAtk}
 							damageReduction={damageReduction}
@@ -149,7 +150,6 @@ export default function App() {
 							onToggle={setDamageCalcEnabled}
 						/>
 					</div>
-
 					<div className="lg:col-span-1">
 						<div className="sticky top-8 space-y-6">
 							<ResultDisplay
