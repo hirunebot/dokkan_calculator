@@ -49,10 +49,9 @@ export function calculateATK(stats: DokkanStats): {
 	atk = Math.floor(atk);
 	atk *= 1 + link_atk / 100;
 	atk = Math.floor(atk);
-	atk *= SA_power + SA_atk / 100 + SAboost_level * 0.05;
-	atk = Math.floor(atk);
 	atk *= ki_bonus;
 	atk = Math.floor(atk);
+	atk *= SA_power + SA_atk / 100 + SAboost_level * 0.05;
 
 	const result = Math.round(atk);
 	const overflow = result >= MAX_UINT32;
