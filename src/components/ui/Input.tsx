@@ -5,6 +5,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 	error?: string;
 	suffix?: string;
 	disableSelectOnFocus?: boolean;
+	allowDecimal?: boolean;
 }
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
@@ -16,14 +17,19 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
 			className = "",
 			id: providedId,
 			disableSelectOnFocus = false,
+			allowDecimal = false,
 			onFocus,
 			onInput,
+			value,
 			...props
 		},
 		ref,
 	) => {
 		const generatedId = useId();
 		const inputId = providedId || generatedId;
+
+		// type="number" で value が 0 の場合は空文字列を表示
+		const displayValue = props.type === "number" && value === 0 ? "" : value;
 
 		const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
 			if (!disableSelectOnFocus && e.target.type === "number") {
@@ -34,10 +40,17 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
 
 		const handleInput = (e: React.FormEvent<HTMLInputElement>) => {
 			const target = e.target as HTMLInputElement;
-			if (target.type === "number") {
+			if (target.type === "number" && !allowDecimal) {
 				target.value = target.value.replace(/[^0-9]/g, "");
 			}
 			onInput?.(e);
+		};
+
+		const handleWheel = (e: React.WheelEvent<HTMLInputElement>) => {
+			const target = e.target as HTMLInputElement;
+			if (target.type === "number") {
+				target.blur();
+			}
 		};
 
 		return (
@@ -56,6 +69,8 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
 						id={inputId}
 						onFocus={handleFocus}
 						onInput={handleInput}
+						onWheel={handleWheel}
+						value={displayValue}
 						className={`
               w-full h-10 px-3 py-2 border border-gray-300 rounded-md
               text-gray-900 font-medium

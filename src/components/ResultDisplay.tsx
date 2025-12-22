@@ -99,7 +99,7 @@ export default function ResultDisplay({
 				<div className="mt-6 space-y-2 px-1">
 					<div className="flex justify-between items-center">
 						<span className="text-sm font-medium text-gray-600">
-							ATK倍率 (パッシブ・サポート)
+							合計ATK倍率
 						</span>
 						<span className="text-base font-semibold text-gray-700">
 							{statsMultipliers.atkMultiplierPercentage}%
@@ -107,7 +107,7 @@ export default function ResultDisplay({
 					</div>
 					<div className="flex justify-between items-center">
 						<span className="text-sm font-medium text-gray-600">
-							DEF倍率 (パッシブ・サポート)
+							合計DEF倍率
 						</span>
 						<span className="text-base font-semibold text-gray-700">
 							{statsMultipliers.defMultiplierPercentage}%

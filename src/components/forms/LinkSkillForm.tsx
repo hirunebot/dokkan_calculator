@@ -22,6 +22,7 @@ export default function LinkSkillForm({ stats, onChange }: LinkSkillFormProps) {
 						value={stats.link_atk}
 						onChange={(e) => onChange("link_atk", Number(e.target.value))}
 						suffix="%"
+						allowDecimal
 					/>
 					<Input
 						label="リンクスキルDEF上昇率"
@@ -29,6 +30,7 @@ export default function LinkSkillForm({ stats, onChange }: LinkSkillFormProps) {
 						value={stats.link_def}
 						onChange={(e) => onChange("link_def", Number(e.target.value))}
 						suffix="%"
+						allowDecimal
 					/>
 				</div>
 				<div className="space-y-4">
