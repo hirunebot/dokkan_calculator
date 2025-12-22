@@ -65,14 +65,14 @@ export interface FullCalculationResult extends CalculationResult {
 
 export const DEFAULT_DOKKAN_STATS: DokkanStats = {
 	// Basic Stats
-	stats_atk: 15000,
-	stats_def: 10000,
+	stats_atk: 0,
+	stats_def: 0,
 
 	// Leader Skills (default 200%)
-	Lskill_atk_1: 200,
-	Lskill_def_1: 200,
-	Lskill_atk_2: 200,
-	Lskill_def_2: 200,
+	Lskill_atk_1: 220,
+	Lskill_def_1: 220,
+	Lskill_atk_2: 220,
+	Lskill_def_2: 220,
 
 	// Passive Skills
 	Pskill_atk_1: 0,
