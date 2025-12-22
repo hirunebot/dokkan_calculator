@@ -34,15 +34,25 @@ export function calculateATK(stats: DokkanStats): {
 
 	let atk = stats_atk;
 	atk *= 1 + (Lskill_atk_1 + Lskill_atk_2) / 100;
+	atk = Math.floor(atk);
 	atk *= 1 + Pskill_atk_1 / 100 + support_atk_1 / 100;
+	atk = Math.floor(atk);
 	atk *= 1 + Pskill_atk_2 / 100 + support_atk_2 / 100;
+	atk = Math.floor(atk);
 	atk *= 1 + support_atk_active / 100;
+	atk = Math.floor(atk);
 	atk *= 1 + support_atk_item / 100;
+	atk = Math.floor(atk);
 	atk *= 1 + support_atk_field / 100;
+	atk = Math.floor(atk);
 	atk *= 1 + support_atk_memory / 100;
+	atk = Math.floor(atk);
 	atk *= 1 + link_atk / 100;
+	atk = Math.floor(atk);
 	atk *= SA_power + SA_atk / 100 + SAboost_level * 0.05;
+	atk = Math.floor(atk);
 	atk *= ki_bonus;
+	atk = Math.floor(atk);
 
 	const result = Math.round(atk);
 	const overflow = result >= MAX_UINT32;
@@ -77,18 +87,29 @@ export function calculateActiveSkillATK(
 
 	let atk = stats_atk;
 	atk *= 1 + (Lskill_atk_1 + Lskill_atk_2) / 100;
+	atk = Math.floor(atk);
 	atk *= 1 + Pskill_atk_1 / 100 + support_atk_1 / 100;
+	atk = Math.floor(atk);
 	atk *= 1 + Pskill_atk_2 / 100 + support_atk_2 / 100;
+	atk = Math.floor(atk);
 	atk *= 1 + support_atk_active / 100;
+	atk = Math.floor(atk);
 	atk *= 1 + support_atk_item / 100;
+	atk = Math.floor(atk);
 	atk *= 1 + support_atk_field / 100;
+	atk = Math.floor(atk);
 	atk *= 1 + support_atk_memory / 100;
+	atk = Math.floor(atk);
 	atk *= 1 + link_atk / 100;
+	atk = Math.floor(atk);
 
 	const activeSkillMultiplier = activeSkillPower + temporaryATKBoost / 100;
 	atk *= activeSkillMultiplier + SABoostLevel * 0.05;
+	atk = Math.floor(atk);
 	atk *= 1 + SA_atk / 100;
+	atk = Math.floor(atk);
 	atk *= ki_bonus;
+	atk = Math.floor(atk);
 
 	const result = Math.round(atk);
 	const overflow = result >= MAX_UINT32;
@@ -120,14 +141,23 @@ export function calculateDEF(stats: DokkanStats): {
 
 	let def = stats_def;
 	def *= 1 + (Lskill_def_1 + Lskill_def_2) / 100;
+	def = Math.floor(def);
 	def *= 1 + Pskill_def_1 / 100 + support_def_1 / 100;
+	def = Math.floor(def);
 	def *= 1 + Pskill_def_2 / 100 + support_def_2 / 100;
+	def = Math.floor(def);
 	def *= 1 + support_def_active / 100;
+	def = Math.floor(def);
 	def *= 1 + support_def_item / 100;
+	def = Math.floor(def);
 	def *= 1 + support_def_field / 100;
+	def = Math.floor(def);
 	def *= 1 + support_def_memory / 100;
+	def = Math.floor(def);
 	def *= 1 + SA_def / 100;
+	def = Math.floor(def);
 	def *= 1 + link_def / 100;
+	def = Math.floor(def);
 
 	const result = Math.round(def);
 	const overflow = result >= MAX_UINT32;
